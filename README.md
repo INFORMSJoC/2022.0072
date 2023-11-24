@@ -1,4 +1,3 @@
-# 2022.0072
 [![INFORMS Journal on Computing Logo](https://INFORMSJoC.github.io/logos/INFORMS_Journal_on_Computing_Header.jpg)](https://pubsonline.informs.org/journal/ijoc)
 
 # Identifying Socially Optimal Equilibria using Combinatorial Properties of Nash Equilibria in Bimatrix Games
@@ -7,23 +6,22 @@ This archive is distributed in association with the [INFORMS Journal on
 Computing](https://pubsonline.informs.org/journal/ijoc) under the [MIT License](LICENSE).
 
 The software and data in this repository are a snapshot of the software and data
-that were used in the research reported on in the paper 
-[This is a Template](https://doi.org/10.1287/ijoc.2019.0000) by T. Ralphs. 
+that were used in the research reported on in the [paper](https://doi.org/10.1287/ijoc.2022.0072) by Amin Dehghanian, Yujia Xie, and Nicoleta Serban.
 The snapshot is based on 
-[this SHA](https://github.com/tkralphs/JoCTemplate/commit/f7f30c63adbcb0811e5a133e1def696b74f3ba15) 
+[this SHA](https://github.com/yujiaxie000/GameTheory/commit/6db33484782012d837cc731d8c3c00616bcf6d9a) 
 in the development repository. 
 
 **Important: This code is being developed on an on-going basis at 
-https://github.com/tkralphs/JoCTemplate. Please go there if you would like to
+https://github.com/yujiaxie000/GameTheory. Please go there if you would like to
 get a more recent version or would like support**
 
 ## Cite
 
 To cite the contents of this repository, please cite both the paper and this repo, using their respective DOIs.
 
-https://doi.org/10.1287/ijoc.2019.0000
+https://doi.org/10.1287/ijoc.2022.0072
 
-https://doi.org/10.1287/ijoc.2019.0000.cd
+https://doi.org/10.1287/ijoc.2022.0072.cd
 
 Below is the BibTex for citing this snapshot of the respoitory.
 
@@ -33,7 +31,7 @@ Below is the BibTex for citing this snapshot of the respoitory.
   publisher =     {INFORMS Journal on Computing},
   title =         {{Identifying Socially Optimal Equilibria using Combinatorial Properties of Nash Equilibria in Bimatrix Games}},
   year =          {2023},
-  doi =           {10.1287/ijoc.2019.0000.cd},
+  doi =           {10.1287/ijoc.2022.0072.cd},
   url =           {https://github.com/INFORMSJoC/2022.0072},
 }  
 ```
@@ -134,9 +132,9 @@ Replace `Solver_EnhancedHeuristic.py` with other solver scripts in `src` as well
 ## Ongoing Development
 
 This code is being developed on an on-going basis at the author's
-[Github site](https://github.com/tkralphs/JoCTemplate).
+[Github site](https://github.com/yujiaxie000/GameTheory).
 
 ## Support
 
 For support in using this software, submit an
-[issue](https://github.com/tkralphs/JoCTemplate/issues/new).
+[issue](https://github.com/INFORMSJoC/2022.0072/issues/new).
