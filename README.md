@@ -38,7 +38,7 @@ Below is the BibTex for citing this snapshot of the respoitory.
 
 ## Description
 
-The goal of this software is to demonstrate different algorithms for identifying socially optimal nash equilibria in bimatrix games.
+The goal of this software is to demonstrate different algorithms for identifying socially optimal Nash equilibria in bimatrix games.
 
 This repository is made of the following directories and subdirectories
 
