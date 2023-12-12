@@ -26,7 +26,7 @@ https://doi.org/10.1287/ijoc.2022.0072.cd
 Below is the BibTex for citing this snapshot of the respoitory.
 
 ```
-@article{CacheTest,
+@article{Dehghanian2023,
   author =        {Dehghanian, Amin and Xie, Yujia and Serban, Nicoleta},
   publisher =     {INFORMS Journal on Computing},
   title =         {{Identifying Socially Optimal Equilibria using Combinatorial Properties of Nash Equilibria in Bimatrix Games}},
