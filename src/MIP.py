@@ -2,8 +2,12 @@ import cplex
 from util import *
 from addPrimal import *
 
+
 def initBigM(instance):
-    return max(instance._XRange[1], instance._YRange[1]) - min(instance._XRange[0], instance._YRange[0])
+    return max(instance._XRange[1], instance._YRange[1]) - min(
+        instance._XRange[0], instance._YRange[0]
+    )
+
 
 def translateSolution(instance, warmStartSolution):
     vx = warmStartSolution[-2]
@@ -20,9 +24,10 @@ def translateSolution(instance, warmStartSolution):
     start = py + px + slack_x + slack_y + warmStartSolution[-2:]
     return start
 
+
 def getOpt(instance, warmStartSolution):
     bigM = initBigM(instance)
-    
+
     ## Variables
     model = cplex.Cplex()
 
@@ -87,19 +92,21 @@ def getOpt(instance, warmStartSolution):
     m_lb.append(0.0)
     m_ub.append(cplex.infinity)
     m_type += "C"
-    m_objective.append(1.0) ## di, coefficients
+    m_objective.append(1.0)  ## di, coefficients
     m_variableName.append("Vx")
 
     # y: -1
     m_lb.append(0.0)
     m_ub.append(cplex.infinity)
     m_type += "C"
-    m_objective.append(1.0) ## di, coefficients
+    m_objective.append(1.0)  ## di, coefficients
     m_variableName.append("Vy")
 
     ############################ Model
     model.objective.set_sense(model.objective.sense.maximize)
-    model.variables.add(names=m_variableName, lb=m_lb, ub=m_ub, obj=m_objective, types=m_type)
+    model.variables.add(
+        names=m_variableName, lb=m_lb, ub=m_ub, obj=m_objective, types=m_type
+    )
 
     ############################ Constraint
     m_matrix = []
@@ -116,10 +123,12 @@ def getOpt(instance, warmStartSolution):
         values = []
         vIndex = len(m_variableName) - 2
         sIndex = i + instance._yNum + instance._xNum
-        
+
         for j in range(instance._yNum):
-            values.append(instance._value[i][j]['x'])
-        m_matrix.append(cplex.SparsePair(ind=index_px + [sIndex, vIndex], val=values + [1.0,-1.0]))
+            values.append(instance._value[i][j]["x"])
+        m_matrix.append(
+            cplex.SparsePair(ind=index_px + [sIndex, vIndex], val=values + [1.0, -1.0])
+        )
         m_rhs.append(0.0)
         m_constraint_senses.append("E")
         m_constraint_name.append("cxE%d" % i)
@@ -131,33 +140,35 @@ def getOpt(instance, warmStartSolution):
         sIndex = j + instance._yNum + instance._xNum + instance._xNum
 
         for i in range(instance._xNum):
-            values.append(instance._value[i][j]['y'])
-        m_matrix.append(cplex.SparsePair(ind=index_py + [sIndex, vIndex], val=values + [1.0,-1.0]))
+            values.append(instance._value[i][j]["y"])
+        m_matrix.append(
+            cplex.SparsePair(ind=index_py + [sIndex, vIndex], val=values + [1.0, -1.0])
+        )
         m_rhs.append(0.0)
         m_constraint_senses.append("E")
         m_constraint_name.append("cyE%d" % i)
 
-
     ######## 3c
     # x
-    
+
     m_matrix.append(cplex.SparsePair(ind=index_px, val=[1.0 for i in index_px]))
     m_rhs.append(1.0)
     m_constraint_senses.append("E")
     m_constraint_name.append("p")
 
-    #y
-    
+    # y
+
     m_matrix.append(cplex.SparsePair(ind=index_py, val=[1.0 for j in index_py]))
     m_rhs.append(1.0)
     m_constraint_senses.append("E")
     m_constraint_name.append("p")
 
-
     ######## 3d
     # px, x
     for i in range(instance._xNum):
-        binaryIndex = i + instance._yNum + instance._xNum + instance._xNum + instance._yNum
+        binaryIndex = (
+            i + instance._yNum + instance._xNum + instance._xNum + instance._yNum
+        )
         pxIndex = i + instance._yNum
         m_matrix.append(cplex.SparsePair(ind=[pxIndex, binaryIndex], val=[1.0, -1.0]))
         m_rhs.append(0.0)
@@ -166,7 +177,14 @@ def getOpt(instance, warmStartSolution):
 
     # py, y
     for j in range(instance._yNum):
-        binaryIndex = j + instance._yNum + instance._xNum + instance._xNum + instance._yNum + instance._xNum
+        binaryIndex = (
+            j
+            + instance._yNum
+            + instance._xNum
+            + instance._xNum
+            + instance._yNum
+            + instance._xNum
+        )
         pyIndex = j
         m_matrix.append(cplex.SparsePair(ind=[pyIndex, binaryIndex], val=[1.0, -1.0]))
         m_rhs.append(0.0)
@@ -177,7 +195,9 @@ def getOpt(instance, warmStartSolution):
     # sx, x
     for i in range(instance._xNum):
         sIndex = i + instance._yNum + instance._xNum
-        binaryIndex = i + instance._yNum + instance._xNum + instance._xNum + instance._yNum
+        binaryIndex = (
+            i + instance._yNum + instance._xNum + instance._xNum + instance._yNum
+        )
         m_matrix.append(cplex.SparsePair(ind=[sIndex, binaryIndex], val=[1.0, bigM]))
         m_rhs.append(bigM)
         m_constraint_senses.append("L")
@@ -186,16 +206,30 @@ def getOpt(instance, warmStartSolution):
     # sy, y
     for j in range(instance._yNum):
         sIndex = j + instance._yNum + instance._xNum + instance._xNum
-        binaryIndex = j + instance._yNum + instance._xNum + instance._xNum + instance._yNum + instance._xNum
+        binaryIndex = (
+            j
+            + instance._yNum
+            + instance._xNum
+            + instance._xNum
+            + instance._yNum
+            + instance._xNum
+        )
         m_matrix.append(cplex.SparsePair(ind=[sIndex, binaryIndex], val=[1.0, bigM]))
         m_rhs.append(bigM)
         m_constraint_senses.append("L")
         m_constraint_name.append("My%d" % i)
 
-    model.linear_constraints.add(rhs=m_rhs, lin_expr=m_matrix, names=m_constraint_name, senses=m_constraint_senses)
+    model.linear_constraints.add(
+        rhs=m_rhs,
+        lin_expr=m_matrix,
+        names=m_constraint_name,
+        senses=m_constraint_senses,
+    )
     if warmStartSolution:
         start = translateSolution(instance, warmStartSolution)
-        idx = [i for i in range(len(start) - 2)] + [len(m_lb)-2, len(m_lb)-1]
-        model.MIP_starts.add(cplex.SparsePair(ind=idx, val=start), model.MIP_starts.effort_level.auto)
+        idx = [i for i in range(len(start) - 2)] + [len(m_lb) - 2, len(m_lb) - 1]
+        model.MIP_starts.add(
+            cplex.SparsePair(ind=idx, val=start), model.MIP_starts.effort_level.auto
+        )
 
     return model
